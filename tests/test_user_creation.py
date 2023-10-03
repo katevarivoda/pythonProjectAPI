@@ -31,7 +31,6 @@ def test_add_new_unique_user():
     assert created_user_gender == random_gender
     assert created_user_status == random_status
 
-
 def test_status_code_on_empty_submission():
     url = endpoints.BASE_URL
     payload = {}
