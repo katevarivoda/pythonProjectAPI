@@ -1,5 +1,6 @@
 import json
 import string
+import uuid
 from uuid import uuid4
 import requests
 import random
@@ -16,6 +17,7 @@ def generate_random_status():
     status_options = ["active", "inactive"]
     selected_status = random.choice(status_options)
     return selected_status
+
 
 def generate_random_email():
     domain = "@example.com"
@@ -62,3 +64,15 @@ def get_all_users():
 
 def search_user_by_name(peoples, unique_last_name):
     return [person for person in peoples if person['name'] == unique_last_name]
+
+
+def generate_random_id():
+    # Generate a random UUID as a string
+    random_id = str(uuid.uuid4())
+    return random_id
+
+
+def generate_invalid_token(length):
+    letters = string.ascii_lowercase
+    result_str = ''.join(random.choice(letters) for i in range(length))
+    return result_str

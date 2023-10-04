@@ -1,16 +1,7 @@
-import json
-
 import requests
-from uuid import uuid4
-from json import dumps
-
-import random
-import string
-
-from assertpy import assert_that
-
 from api import endpoints
-from conftest import generate_random_user, generate_random_email, generate_new_unique_user
+from api.endpoints import HEADERS
+from conftest import generate_random_id, generate_new_unique_user
 
 
 def test_delete_user():
@@ -24,4 +15,22 @@ def test_delete_user():
     assert response.status_code == 204
 
 
+def test_deleting_nonexistent_user():
+    user_id = generate_random_id()
+    url = f'{endpoints.BASE_URL}/{user_id}'
+    payload = {}
+    response = requests.request("DELETE", url, headers=HEADERS, data=payload)
+    assert response.status_code == 404
 
+
+def test_delete_user_without_authorization():
+    new_user = generate_new_unique_user()
+    user_data = new_user.json()
+    person_to_be_deleted = user_data["id"]
+    url = f'{endpoints.BASE_URL}/{person_to_be_deleted}'
+    headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'}
+    payload = {}
+    response = requests.request("DELETE", url, headers=headers, data=payload)
+    assert response.status_code == 404
