@@ -1,18 +1,30 @@
 import json
+
 import pytest
 import requests
-from api import endpoints
+
 from api.endpoints import BASE_URL, HEADERS
-from conftest import generate_random_user, generate_random_email, generate_new_unique_user, generate_random_id, \
-    generate_random_gender, generate_random_status
+from conftest import (
+    generate_random_user,
+    generate_random_email,
+    generate_new_unique_user,
+    generate_random_id,
+    generate_random_gender,
+    generate_random_status,
+)
 
 
 @pytest.fixture
 def user_to_update():
+    # Generate a new user to be updated
     return generate_new_unique_user().json()
 
 
-def test_update_user(user_to_update):
+@pytest.mark.smoke
+def test_update_existing_user(user_to_update):
+    """
+    Test updating an existing user's information.
+    """
     user_id = user_to_update["id"]
     url = f'{BASE_URL}/{user_id}'
     updated_name = generate_random_user()
@@ -34,7 +46,10 @@ def test_update_user(user_to_update):
     assert updated_user_data["status"] == updated_status
 
 
-def test_partial_update_user(user_to_update):
+def test_partial_update_existing_user(user_to_update):
+    """
+    Test partial update of an existing user's information (e.g., updating only the name).
+    """
     user_id = user_to_update["id"]
     url = f'{BASE_URL}/{user_id}'
     updated_name = generate_random_user()
@@ -48,6 +63,9 @@ def test_partial_update_user(user_to_update):
 
 
 def test_update_nonexistent_user():
+    """
+    Test attempting to update a user that does not exist (nonexistent ID).
+    """
     user_id = generate_random_id()
     url = f'{BASE_URL}/{user_id}'
     payload = {}

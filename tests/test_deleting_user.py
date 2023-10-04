@@ -1,9 +1,11 @@
+import pytest
 import requests
 from api import endpoints
 from api.endpoints import HEADERS
 from conftest import generate_random_id, generate_new_unique_user
 
 
+@pytest.mark.delete
 def test_delete_user():
     new_user = generate_new_unique_user()
     user_data = new_user.json()
@@ -15,6 +17,7 @@ def test_delete_user():
     assert response.status_code == 204
 
 
+@pytest.mark.delete
 def test_deleting_nonexistent_user():
     user_id = generate_random_id()
     url = f'{endpoints.BASE_URL}/{user_id}'
@@ -23,6 +26,7 @@ def test_deleting_nonexistent_user():
     assert response.status_code == 404
 
 
+@pytest.mark.delete
 def test_delete_user_without_authorization():
     new_user = generate_new_unique_user()
     user_data = new_user.json()
